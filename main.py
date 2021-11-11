@@ -1,6 +1,6 @@
-from stateFunctions import *
 from searchAlgorithms import *
-state = 182043765
+state = 413270568
+depthFirstSearch(state)
 breadthFirstSearch(state)
 
 
