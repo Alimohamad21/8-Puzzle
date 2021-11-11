@@ -8,4 +8,6 @@ from searchAlgorithms import *
 #         lines = f.readlines()
 #         for line in lines:
 #             aStarSearch(int(line), calculateManhattanHeuristic)
+depthFirstSearch(413270568)
 breadthFirstSearch(413270568)
+aStarSearch(413270568)

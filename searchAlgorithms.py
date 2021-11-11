@@ -77,7 +77,7 @@ def aStarSearch(initialState, heuristic=calculateManhattanHeuristic):
         if isGoal(state):
             break
         else:
-            children = getNextStates(initialState)
+            children = getNextStates(state)
             for child in children:
                 if child not in explored and child not in frontier:
                     gScore[child] = gScore[state] + 1
