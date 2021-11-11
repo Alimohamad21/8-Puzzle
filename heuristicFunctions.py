@@ -1,5 +1,6 @@
-from stateFunctions import *
 from math import sqrt
+
+from stateFunctions import getElementAtIndex
 
 
 def calculateManhattanHeuristic(boardState):
@@ -8,7 +9,7 @@ def calculateManhattanHeuristic(boardState):
         for j in range(3):
             number = getElementAtIndex(boardState, i, j)
             if number != 0:
-                h += abs(goalState[number][0] - i) + abs(goalState[number][1] - j)
+                h += abs(number // 3 - i) + abs(number % 3 - j)
     return h
 
 
@@ -18,5 +19,5 @@ def calculateEuclideanHeuristic(boardState):
         for j in range(3):
             number = getElementAtIndex(boardState, i, j)
             if number != 0:
-                h += sqrt(abs(goalState[number][0] - i) ** 2 + abs(goalState[number][1] - j) ** 2)
+                h += sqrt(abs(number // 3 - i) ** 2 + abs(number % 3 - j) ** 2)
     return h
