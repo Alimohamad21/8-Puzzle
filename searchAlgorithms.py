@@ -1,25 +1,29 @@
 import time
 
-import heuristicFunctions
 from heapdict import heapDict
+from heuristicFunctions import *
 from stateFunctions import *
 
 
 def breadthFirstSearch(boardState):
     startTime = time.time()
-    frontier = set()
-    frontier.add(boardState)
+    frontier = []
+    optimizedFrontier = set()
+    optimizedFrontier.add(boardState)
+    frontier.append(boardState)
     explored = set()
     parentMap = {boardState: boardState}
     while len(frontier) > 0:
-        currentState = frontier.pop()  # enqueue
+        currentState = frontier.pop(0)  # enqueue
         explored.add(currentState)
         if isGoal(currentState):
             break
         else:
-            for child in getNextStates(currentState):
-                if child not in frontier and child not in explored:
-                    frontier.add(child)
+            children = getNextStates(currentState)
+            for child in children:
+                if child not in optimizedFrontier and child not in explored:
+                    frontier.append(child)
+                    optimizedFrontier.add(child)
                     parentMap[child] = currentState
     runTime = time.time() - startTime
     print('BFS PATH:\n\n')
@@ -42,7 +46,8 @@ def depthFirstSearch(boardState):
         if isGoal(currentState):
             break
         else:
-            for child in getNextStates(currentState):
+            children = getNextStates(currentState)
+            for child in children:
                 if child not in explored and child not in optimizedFrontier:
                     frontier.append(child)
                     optimizedFrontier.add(child)
@@ -50,11 +55,11 @@ def depthFirstSearch(boardState):
     runTime = time.time() - startTime
     print('DFS PATH:\n\n')
     getPath(parentMap)
-    print(f'\n\nNumber of nodes expanded DFS: {len(explored)}')
+    print(f'\n\nNumber of nodes expanded in DFS: {len(explored)}')
     print(f'\n\nDFS completed in {runTime} seconds\n\n')
 
 
-def aStarSearch(initialState, heuristic=heuristicFunctions.calculateManhattanHeuristic):
+def aStarSearch(initialState, heuristic=calculateManhattanHeuristic):
     startTime = time.time()
     frontier = heapDict()
     frontier[initialState] = heuristic(initialState)
@@ -70,12 +75,10 @@ def aStarSearch(initialState, heuristic=heuristicFunctions.calculateManhattanHeu
         state = frontier.popitem()[0]
         explored.add(state)
         if isGoal(state):
-            runTime = time.time() - startTime
-            getPath(parentMap)
-            print(f'\n\nA-Star completed in {runTime} seconds and expanded a total of {expanded} Nodes\n\n')
-            return True
+            break
         else:
-            for child in getNextStates(state):
+            children = getNextStates(initialState)
+            for child in children:
                 if child not in explored and child not in frontier:
                     gScore[child] = gScore[state] + 1
                     hscore[child] = heuristic(child)
@@ -84,12 +87,14 @@ def aStarSearch(initialState, heuristic=heuristicFunctions.calculateManhattanHeu
                 elif child in frontier:
                     t_gScore = gScore[state] + 1
                     if hscore[child] + t_gScore < frontier[child]:
-                        gScore[child]=t_gScore
+                        gScore[child] = t_gScore
                         frontier[child] = hscore[child] + gScore[child]
-                        parentMap[child]=state
+                        parentMap[child] = state
     runTime = time.time() - startTime
-    print(f'\n\nA-Star completed in {runTime} seconds\n\n')
-    return False
+    print('A* PATH:\n\n')
+    getPath(parentMap)
+    print(f'\n\nNumber of nodes expanded A*: {expanded}')
+    print(f'\n\nA* completed in {runTime} seconds\n\n')
 
 
 def getPath(parentMap):
@@ -100,7 +105,7 @@ def getPath(parentMap):
         child = parent
         parent = parentMap[child]
         path.append(child)
-    cost = len(path)
+    cost = len(path) - 1
     for i in range(cost):
         printBoardState(path.pop())
     print(f'\n\nDEPTH=COST= {cost}')
