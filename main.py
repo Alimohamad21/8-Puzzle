@@ -1,6 +1,7 @@
-import heuristicFunctions
-import searchAlgorithms
-
+from searchAlgorithms import *
+state = 413270568
+depthFirstSearch(state)
+breadthFirstSearch(state)
 initialState = 103248567
-searchAlgorithms.breadthFirstSearch(initialState)
-searchAlgorithms.aStarSearch(initialState, heuristicFunctions.calculateManhattanHeuristic)
+breadthFirstSearch(initialState)
+aStarSearch(initialState, heuristicFunctions.calculateManhattanHeuristic)

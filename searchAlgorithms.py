@@ -1,5 +1,6 @@
 import time
 
+import heuristicFunctions
 from heapdict import heapDict
 from stateFunctions import *
 
@@ -21,7 +22,9 @@ def breadthFirstSearch(boardState):
                     frontier.add(child)
                     parentMap[child] = currentState
     runTime = time.time() - startTime
+    print('BFS PATH:\n\n')
     getPath(parentMap)
+    print(f'\n\nNumber of nodes expanded in BFS: {len(explored)}')
     print(f'\n\nBFS completed in {runTime} seconds\n\n')
 
 
@@ -45,11 +48,13 @@ def depthFirstSearch(boardState):
                     optimizedFrontier.add(child)
                     parentMap[child] = currentState
     runTime = time.time() - startTime
+    print('DFS PATH:\n\n')
     getPath(parentMap)
+    print(f'\n\nNumber of nodes expanded DFS: {len(explored)}')
     print(f'\n\nDFS completed in {runTime} seconds\n\n')
 
 
-def aStarSearch(initialState, heuristic):
+def aStarSearch(initialState, heuristic=heuristicFunctions.calculateManhattanHeuristic):
     startTime = time.time()
     frontier = heapDict()
     frontier[initialState] = heuristic(initialState)
@@ -95,7 +100,6 @@ def getPath(parentMap):
         parent = parentMap[child]
         path.append(child)
     cost = len(path)
-    print('PATH:\n\n')
     for i in range(cost):
         printBoardState(path.pop())
     print(f'\n\nDEPTH=COST= {cost}')
