@@ -1,13 +1,15 @@
 from searchAlgorithms import *
+from solvable import isSolvable
 
-# start = 0
-# end = 2
-# for i in range(start, end):
-#     filename = f"optimal/manhattan/puzzle3x3-{i:02d}.txt"
-#     with open(filename, 'r') as f:
-#         lines = f.readlines()
-#         for line in lines:
-#             aStarSearch(int(line), calculateManhattanHeuristic)
-depthFirstSearch(413270568)
-breadthFirstSearch(413270568)
-aStarSearch(413270568)
+state = getRandomState()
+print('CURRENTLY SOLVING:')
+printBoardState(state)
+if not isSolvable(state):
+    print('8 PUZZLE NOT SOLVABLE DUE TO ODD NUMBER OF INVERSIONS')
+    exit(0)
+depthFirstSearch(state)
+breadthFirstSearch(state)
+print('\n\nA* USING MANHATTAN HEURISTIC:\n\n')
+aStarSearch(state, calculateManhattanHeuristic)
+print('\n\nA* USING EUCLIDEAN HEURISTIC:\n\n')
+aStarSearch(state, calculateEuclideanHeuristic)

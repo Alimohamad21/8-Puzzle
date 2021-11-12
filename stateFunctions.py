@@ -8,10 +8,6 @@ def isGoal(boardState):
         return False
 
 
-def isSolvable(boardState):
-    return True
-
-
 def getRandomState():
     arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
     random.shuffle(arr)
@@ -21,14 +17,14 @@ def getRandomState():
 
 def getElementAtIndex(boardState, i, j):
     temp = boardState
-    return temp // 10 ** (8 - (3 * i + j)) % 10
+    return temp // 10 ** (8 - (3 * i + j)) % 10  # equation to get element at position i,j in the board
 
 
 def findIndexOf(boardState, toBeFound):
     temp = boardState
     for i in range(9):
         if temp % 10 == toBeFound:
-            return (8 - i) // 3, (8 - i) % 3
+            return (8 - i) // 3, (8 - i) % 3  # equation to get i,j of a certain element in the board
         temp = temp // 10
 
 
@@ -44,7 +40,7 @@ def printBoardState(boardState):
     print('---------')
 
 
-def swap(boardState, position1, position2):
+def swap(boardState, position1, position2):  # function for swapping the blocked tile with an adjacent number
     tempBoardState = str(boardState)
     if boardState < 100000000:
         tempBoardState = '0' + tempBoardState
@@ -53,24 +49,24 @@ def swap(boardState, position1, position2):
     return int(''.join(tempBoardState))
 
 
-def getNextStates(boardState):
+def getNextStates(boardState):  # generates all possible next states by swapping blocked tile with an adjacent number
     states = []
     i, j = findIndexOf(boardState, 0)
     position1 = 3 * i + j
     if i < 2:
+        # swap blocked tile with lower
         position2 = 3 * (i + 1) + j
         states.append(swap(boardState, position1, position2))
-        # swap with lower
     if j < 2:
+        # swap blocked tile with right
         position2 = 3 * i + (j + 1)
         states.append(swap(boardState, position1, position2))
-        # swap with right
     if i > 0:
+        # swap blocked tile with upper
         position2 = 3 * (i - 1) + j
         states.append(swap(boardState, position1, position2))
-        # swap with upper
     if j > 0:
+        # swap blocked tile with left
         position2 = 3 * i + (j - 1)
         states.append(swap(boardState, position1, position2))
-        # swap with left
     return states

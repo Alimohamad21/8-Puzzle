@@ -7,14 +7,15 @@ from stateFunctions import *
 
 def breadthFirstSearch(boardState):
     startTime = time.time()
-    frontier = []
-    optimizedFrontier = set()
+    frontier = []  # list used as queue
+    optimizedFrontier = set()  # used a set to keep track of the frontier to make searching for expanded nodes in frontier in O(1)
     optimizedFrontier.add(boardState)
     frontier.append(boardState)
     explored = set()
-    parentMap = {boardState: boardState}
+    parentMap = {
+        boardState: boardState}  # parent map to keep track of each of the child's parents, to get the goal path at the end
     while len(frontier) > 0:
-        currentState = frontier.pop(0)  # enqueue
+        currentState = frontier.pop(0)  # dequeue
         explored.add(currentState)
         if isGoal(currentState):
             break
@@ -22,8 +23,8 @@ def breadthFirstSearch(boardState):
             children = getNextStates(currentState)
             for child in children:
                 if child not in optimizedFrontier and child not in explored:
-                    frontier.append(child)
-                    optimizedFrontier.add(child)
+                    frontier.append(child)  # enqueue
+                    optimizedFrontier.add(child)  # optimized frontier is updated with main frontier
                     parentMap[child] = currentState
     runTime = time.time() - startTime
     print('BFS PATH:\n\n')
@@ -34,7 +35,7 @@ def breadthFirstSearch(boardState):
 
 def depthFirstSearch(boardState):
     startTime = time.time()
-    frontier = []
+    frontier = []  # list used as stack
     optimizedFrontier = set()
     optimizedFrontier.add(boardState)
     frontier.append(boardState)
@@ -49,7 +50,7 @@ def depthFirstSearch(boardState):
             children = getNextStates(currentState)
             for child in children:
                 if child not in explored and child not in optimizedFrontier:
-                    frontier.append(child)
+                    frontier.append(child)  # push
                     optimizedFrontier.add(child)
                     parentMap[child] = currentState
     runTime = time.time() - startTime
@@ -105,7 +106,8 @@ def getPath(parentMap):
         child = parent
         parent = parentMap[child]
         path.append(child)
-    cost = len(path) - 1
-    for i in range(cost):
+    n = len(path)
+    cost = n - 1
+    for i in range(n):
         printBoardState(path.pop())
     print(f'\n\nDEPTH=COST= {cost}')
